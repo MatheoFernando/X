@@ -3,7 +3,6 @@ import { DotsThree, MagnifyingGlass } from "@phosphor-icons/react";
 function Aside() {
   return (
     <aside className=" text-white">
-      {/* Search Bar */}
       <div className="relative">
         <MagnifyingGlass size={20} className="absolute top-1/2 left-3 -translate-y-1/2 " />
         <input
@@ -14,7 +13,6 @@ function Aside() {
         />
       </div>
 
-      {/* Trends Section */}
       <div className="mt-6 p-4 rounded-2xl  border border-gray-600">
         <h2 className="font-bold text-lg mb-4">Trends for you</h2>
         {[
