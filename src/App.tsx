@@ -1,21 +1,20 @@
-
-import React, { useEffect, useState, useRef } from "react";
-import Navbar from "./components/Navbar";
-import Tweet from "./components/Tweet";
-import Xform from "./components/Xform";
-import { v4 as uuidv4 } from "uuid";
-import {  ImagemContent } from "./utils/generateImg";
-import { motion, AnimatePresence } from "framer-motion";
-import Aside from "./components/Aside";
+import React, { useEffect, useState, useRef } from 'react';
+import Navbar from './components/Navbar';
+import Tweet from './components/Tweet';
+import Xform from './components/Xform';
+import { v4 as uuidv4 } from 'uuid';
+import { ImagemContent } from './utils/generateImg';
+import { motion, AnimatePresence } from 'framer-motion';
+import Aside from './components/Aside';
 import { faker } from '@faker-js/faker';
-import moment from "moment";
+import moment from 'moment';
 interface Tweet {
   id: string;
   name: string;
   username: string;
   avatar: string;
   content: string;
-  time: any;
+  time: string | Date;
   image: string | null;
   likes: number;
   retweets: number;
@@ -62,12 +61,12 @@ const App: React.FC = () => {
       { threshold: 0.1 }
     );
   };
-  
-  // Configura o Moment.js para usar localização em português
-moment.locale('pt-br');
 
-// Função para formatar a data de maneira personalizada
-function formatarData(data) {
+  // Configura o Moment.js para usar localização em português
+  moment.locale('pt-br');
+
+  // Função para formatar a data de maneira personalizada
+  function formatarData(data: any) {
     const agora = moment();
     const dataMoment = moment(data);
 
@@ -76,36 +75,37 @@ function formatarData(data) {
     const horas = agora.diff(dataMoment, 'hours');
 
     if (segundos < 60) {
-        return `${segundos}s`;
+      return `${segundos}s`;
     } else if (minutos < 60) {
-        return `${minutos}m`;
+      return `${minutos}m`;
     } else if (horas < 24) {
-        return `${horas}h`;
+      return `${horas}h`;
     } else {
-        // Formata a data como "16 de jan"
-        return dataMoment.format('D [de] MMM');
+      // Formata a data como "16 de jan"
+      return dataMoment.format('D [de] MMM');
     }
-}
+  }
 
-// Gera uma data fictícia com o Faker
-const dataFicticia = faker.date.between({ from: '2024-06-01', to: new Date() });
+  // Gera uma data fictícia com o Faker
+  const dataFicticia = faker.date.between({
+    from: '2024-06-01',
+    to: new Date(),
+  });
 
-console.log(dataFicticia)
-// Formata a data
-const dataFormatada = formatarData(dataFicticia);
+  console.log(dataFicticia);
+  // Formata a data
+  const dataFormatada = formatarData(dataFicticia);
 
-
-  const randomName = faker.person.fullName(); 
-  const randomEmail = faker.internet.email();
-  const createTweet = (content: string,  isnewPost: boolean): Tweet => {
+  const randomName = faker.person.fullName();
+  const createTweet = (content: string, isnewPost: boolean): Tweet => {
     return {
       id: uuidv4(),
       name: randomName,
-      username: randomEmail,
+      username: faker.internet.username(),
       avatar: faker.image.avatar(),
-      content: content ? content : "",
-      time: isnewPost ? formatarData(new Date()) : dataFormatada,
-      image: isnewPost ? null : ImagemContent() ,
+      content: content ? content : '',
+      time: isnewPost ? new Date().toString() : dataFicticia,
+      image: isnewPost ? null : ImagemContent(),
       likes: 0,
       retweets: 0,
       comments: 0,
@@ -114,10 +114,10 @@ const dataFormatada = formatarData(dataFicticia);
 
   const addInitialTweets = () => {
     const initialTweets = [
-      "Acabei de entrar no clone do Twitter! Estou animado para me conectar com todos aqui. 👋 #NovoUsuário",
-      "Mais um dia, mais uma linha de código. Continuem avançando, colegas desenvolvedores! 💻 #VidaDeCodificação",
-      "Quem mais vai ficar acordado até tarde para assistir à chuva de meteoros hoje à noite? 🌠 #CéuNoturno",
-      "Lembrete: seja gentil consigo mesmo e com os outros. Um pouco de compaixão faz toda a diferença. ❤️ #Positividade",
+      'Acabei de entrar no clone do Twitter! Estou animado para me conectar com todos aqui. 👋 #NovoUsuário',
+      'Mais um dia, mais uma linha de código. Continuem avançando, colegas desenvolvedores! 💻 #VidaDeCodificação',
+      'Quem mais vai ficar acordado até tarde para assistir à chuva de meteoros hoje à noite? 🌠 #CéuNoturno',
+      'Lembrete: seja gentil consigo mesmo e com os outros. Um pouco de compaixão faz toda a diferença. ❤️ #Positividade',
     ];
 
     const newTweets = initialTweets.map((content) =>
@@ -132,11 +132,11 @@ const dataFormatada = formatarData(dataFicticia);
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const randomTweets = [
-      "Dica técnica do dia: sempre faça backup dos seus dados! 💾 ​​#ConselhoTecnológico",
-      "Você já sorriu hoje? Um pequeno gesto pode melhorar o seu dia. 😊 #BemEstar",
-      "Explorando o mundo do React! Cada componente é uma nova aventura. ⚛️ #Desenvolvimento",
-      "Alguém mais está empolgado com as novidades tecnológicas que estão por vir? 🚀 #Inovação",
-      "Café e código: a combinação perfeita para um desenvolvedor. ☕💻 #DevLife",
+      'Dica técnica do dia: sempre faça backup dos seus dados! 💾 ​​#ConselhoTecnológico',
+      'Você já sorriu hoje? Um pequeno gesto pode melhorar o seu dia. 😊 #BemEstar',
+      'Explorando o mundo do React! Cada componente é uma nova aventura. ⚛️ #Desenvolvimento',
+      'Alguém mais está empolgado com as novidades tecnológicas que estão por vir? 🚀 #Inovação',
+      'Café e código: a combinação perfeita para um desenvolvedor. ☕💻 #DevLife',
     ];
 
     const newTweets: Tweet[] = [];
@@ -161,22 +161,28 @@ const dataFormatada = formatarData(dataFicticia);
     }, 1000);
   };
 
-  const handleTweetCreation = (content: string ) => {
-    const newTweet = createTweet(content ,  true );
+  const handleTweetCreation = (content: string) => {
+    const newTweet = createTweet(content, true);
     setTweets((prevTweets) => [newTweet, ...prevTweets]);
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTweets([...tweets]);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [tweets]);
+
   return (
-    <div className="md:mx-auto flex flex-col md:flex-row text-white md:max-w-5xl">
+    <div className='md:mx-auto flex flex-col md:flex-row text-white md:max-w-5xl'>
       <Navbar />
-      <main className="flex-grow border-x border-[#3A444C] max-w-xl">
-        <header className="sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 ">
-          <a className="px-4 pt-4 font-bold cursor-pointer">Home</a>
-     
+      <main className='flex-grow border-x border-[#3A444C] max-w-xl'>
+        <header className='sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 '>
+          <a className='px-4 pt-4 font-bold cursor-pointer'>Home</a>
         </header>
         <Xform onTweet={handleTweetCreation} />
         <AnimatePresence>
-          <div className="flex flex-col gap-4">
+          <div className='flex flex-col gap-4'>
             {tweets.map((tweet) => (
               <motion.div
                 key={tweet.id}
@@ -185,30 +191,30 @@ const dataFormatada = formatarData(dataFicticia);
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <Tweet tweet={tweet} />
+                <Tweet tweet={tweet} formatarData={formatarData} />
               </motion.div>
             ))}
           </div>
         </AnimatePresence>
-        <div ref={loadingRef} className="h-20 flex items-center justify-center">
-          <AnimatePresence mode="wait">
+        <div ref={loadingRef} className='h-20 flex items-center justify-center'>
+          <AnimatePresence mode='wait'>
             {isLoading ? (
               <motion.div
-                key="loading"
+                key='loading'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="loading-spinner"
+                className='loading-spinner'
               >
                 Carregando mais tweets...
               </motion.div>
             ) : isWaiting ? (
               <motion.div
-                key="waiting"
+                key='waiting'
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-gray-500"
+                className='text-gray-500'
               >
                 Aguarde para carregar mais tweets...
               </motion.div>
@@ -216,7 +222,7 @@ const dataFormatada = formatarData(dataFicticia);
           </AnimatePresence>
         </div>
       </main>
-      <aside className="hidden md:block w-96 px-4 mt-4 ">
+      <aside className='hidden md:block w-96 px-4 mt-4 '>
         <Aside />
       </aside>
     </div>
