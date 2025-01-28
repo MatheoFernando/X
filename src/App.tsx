@@ -92,17 +92,19 @@ const App: React.FC = () => {
     to: new Date(),
   });
 
-  console.log(dataFicticia);
-  // Formata a data
-  const dataFormatada = formatarData(dataFicticia);
-
   const randomName = faker.person.fullName();
+  const user = {
+    name: 'Moco',
+    username: 'moco.finance',
+    avatar: '/Moco.jpg',
+  };
+
   const createTweet = (content: string, isnewPost: boolean): Tweet => {
     return {
       id: uuidv4(),
-      name: randomName,
-      username: faker.internet.username(),
-      avatar: faker.image.avatar(),
+      name: isnewPost ? user.name : randomName,
+      username: isnewPost ? user.username : faker.internet.username(),
+      avatar: isnewPost ? user.avatar : faker.image.avatar(),
       content: content ? content : '',
       time: isnewPost ? new Date().toString() : dataFicticia,
       image: isnewPost ? null : ImagemContent(),
