@@ -28,7 +28,6 @@ const Xform: React.FC<XFormProps> = ({ onTweet }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
-    // Only update if within character limit
     if (value.length <= maxCharacters) {
       setText(value);
       setLoading(true);
@@ -48,7 +47,7 @@ const Xform: React.FC<XFormProps> = ({ onTweet }) => {
       <div className="flex gap-4">
         <img src={logo} alt="User avatar" className="size-12 rounded-full" />
         <textarea
-          className="w-full bg-transparent text-white border-none focus:outline-none text-xl resize-none"
+          className="w-full text-base bg-transparent text-white border-none focus:outline-none  resize-none"
           rows={5}
           placeholder="What's happening?"
           maxLength={maxCharacters}

@@ -137,9 +137,9 @@ const App: React.FC = () => {
     <div className="md:mx-auto flex flex-col md:flex-row text-white md:max-w-5xl">
       <Navbar />
       <main className="flex-grow border-x border-[#3A444C] max-w-xl">
-        <header className="sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 flex items-center justify-center gap-6">
-          <a className="px-4 pt-4 font-bold cursor-pointer">For you</a>
-          <a className="px-4 pt-4 font-bold cursor-pointer">Following</a>
+        <header className="sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 ">
+          <a className="px-4 pt-4 font-bold cursor-pointer">Home</a>
+     
         </header>
         <Xform onTweet={handleTweetCreation} />
         <AnimatePresence>
