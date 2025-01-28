@@ -16,14 +16,24 @@ interface XFormProps {
 const Xform: React.FC<XFormProps> = ({ onTweet  }) => {
   const [text, setText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0); 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const maxCharacters = 280;
 
   const handleSubmit = () => {
+    setIsSubmitting(true); 
     if (textareaRef.current) {
       onTweet(textareaRef.current.value );
     }
+    setTimeout(() => {
+      setProgress(100); 
+    }, 3000); 
+
+    setTimeout(() => {
+      setIsSubmitting(false); 
+    }, 1000); 
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,6 +54,12 @@ const Xform: React.FC<XFormProps> = ({ onTweet  }) => {
         text.length > 0 ? "border-blue-500" : "border-[#3A444C]"
       }`}
     >
+       {isSubmitting && (
+        <div
+          className="w-full h-[2px] bg-blue-600 transition-all duration-500"
+          style={{ width: `${progress}%` }}
+        ></div>
+      )}
       <div className="flex gap-4">
         <img src={logo} alt="User avatar" className="size-12 rounded-full" />
         <textarea

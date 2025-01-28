@@ -99,10 +99,12 @@ const Tweet: React.FC<TweetProps> = ({ tweet, formatarData }) => {
               className='flex items-center cursor-pointer hover:text-red-400  '
               onClick={() => handleAction('like')}
             >
-              <Heart
-                size={20}
-                className={`${liked ? 'text-red-400' : 'hover:text-red-400 '}`}
-              />
+                {liked ? (
+                <Heart size={20} weight="fill" className="text-red-400 " />
+              ) : (
+                <Heart size={20} />
+              )}
+
               <span className='ml-1'>{likes}</span>
             </motion.div>
             <div className='flex items-center cursor-pointer hover:text-[#1D9BF0]'>

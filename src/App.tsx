@@ -176,7 +176,7 @@ const App: React.FC = () => {
   }, [tweets]);
 
   return (
-    <div className='md:mx-auto flex flex-col md:flex-row text-white md:max-w-5xl'>
+    <div className='md:mx-auto flex flex-row text-white md:max-w-5xl'>
       <Navbar />
       <main className='flex-grow border-x border-[#3A444C] max-w-xl'>
         <header className='sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 '>
