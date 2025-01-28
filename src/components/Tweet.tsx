@@ -93,13 +93,13 @@ const Tweet: React.FC<TweetProps> = ({ tweet }) => {
             </div>
             <motion.div
               whileTap={{ scale: 1.2 }}
-              className="flex items-center cursor-pointer"
+              className="flex items-center cursor-pointer hover:text-red-400  "
               onClick={() => handleAction("like")}
             >
               <Heart
                 size={20}
                 className={`${
-                  liked ? "text-red-400" : "hover:text-red-400"
+                  liked ? "text-red-400" : "hover:text-red-400 "
                 }`}
               />
               <span className="ml-1">{likes}</span>

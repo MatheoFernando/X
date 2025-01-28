@@ -1,19 +1,21 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import Navbar from "./components/Navbar";
 import Tweet from "./components/Tweet";
 import Xform from "./components/Xform";
 import { v4 as uuidv4 } from "uuid";
-import { Avatar, ImagemContent } from "./utils/generateImg";
+import {  ImagemContent } from "./utils/generateImg";
 import { motion, AnimatePresence } from "framer-motion";
 import Aside from "./components/Aside";
-
+import { faker } from '@faker-js/faker';
+import moment from "moment";
 interface Tweet {
   id: string;
   name: string;
   username: string;
   avatar: string;
   content: string;
-  time: string;
+  time: any;
   image: string | null;
   likes: number;
   retweets: number;
@@ -60,19 +62,50 @@ const App: React.FC = () => {
       { threshold: 0.1 }
     );
   };
+  
+  // Configura o Moment.js para usar localização em português
+moment.locale('pt-br');
 
-  const createTweet = (content: string, imgContent: boolean = false): Tweet => {
+// Função para formatar a data de maneira personalizada
+function formatarData(data) {
+    const agora = moment();
+    const dataMoment = moment(data);
+
+    const segundos = agora.diff(dataMoment, 'seconds');
+    const minutos = agora.diff(dataMoment, 'minutes');
+    const horas = agora.diff(dataMoment, 'hours');
+
+    if (segundos < 60) {
+        return `${segundos}s`;
+    } else if (minutos < 60) {
+        return `${minutos}m`;
+    } else if (horas < 24) {
+        return `${horas}h`;
+    } else {
+        // Formata a data como "16 de jan"
+        return dataMoment.format('D [de] MMM');
+    }
+}
+
+// Gera uma data fictícia com o Faker
+const dataFicticia = faker.date.between({ from: '2024-06-01', to: new Date() });
+
+console.log(dataFicticia)
+// Formata a data
+const dataFormatada = formatarData(dataFicticia);
+
+
+  const randomName = faker.person.fullName(); 
+  const randomEmail = faker.internet.email();
+  const createTweet = (content: string,  isnewPost: boolean): Tweet => {
     return {
       id: uuidv4(),
-      name: "User",
-      username: `user${Math.floor(Math.random() * 100)}`,
-      avatar: Avatar(`user${Math.floor(Math.random() * 100)}@gmail.com`),
-      content,
-      time: new Date().toLocaleString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      image: imgContent ? ImagemContent() : null,
+      name: randomName,
+      username: randomEmail,
+      avatar: faker.image.avatar(),
+      content: content ? content : "",
+      time: isnewPost ? formatarData(new Date()) : dataFormatada,
+      image: isnewPost ? null : ImagemContent() ,
       likes: 0,
       retweets: 0,
       comments: 0,
@@ -88,7 +121,7 @@ const App: React.FC = () => {
     ];
 
     const newTweets = initialTweets.map((content) =>
-      createTweet(content, Math.random() > 0.1)
+      createTweet(content, false)
     );
     setTweets(newTweets);
   };
@@ -110,7 +143,7 @@ const App: React.FC = () => {
     for (let i = 0; i < 2; i++) {
       const randomTweet =
         randomTweets[Math.floor(Math.random() * randomTweets.length)];
-      newTweets.push(createTweet(randomTweet, Math.random() > 0.1));
+      newTweets.push(createTweet(randomTweet, false));
     }
 
     setTweets((prevTweets) => [...prevTweets, ...newTweets]);
@@ -128,8 +161,8 @@ const App: React.FC = () => {
     }, 1000);
   };
 
-  const handleTweetCreation = (content: string) => {
-    const newTweet = createTweet(content, Math.random() > 0.1);
+  const handleTweetCreation = (content: string ) => {
+    const newTweet = createTweet(content ,  true );
     setTweets((prevTweets) => [newTweet, ...prevTweets]);
   };
 

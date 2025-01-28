@@ -13,7 +13,7 @@ interface XFormProps {
   onTweet: (text: string) => void; 
 }
 
-const Xform: React.FC<XFormProps> = ({ onTweet }) => {
+const Xform: React.FC<XFormProps> = ({ onTweet  }) => {
   const [text, setText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -22,7 +22,7 @@ const Xform: React.FC<XFormProps> = ({ onTweet }) => {
 
   const handleSubmit = () => {
     if (textareaRef.current) {
-      onTweet(textareaRef.current.value);
+      onTweet(textareaRef.current.value );
     }
   };
 
