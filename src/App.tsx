@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import React, { useEffect, useState, useRef } from 'react';
 import Navbar from './components/Navbar';
 import Tweet from './components/Tweet';
@@ -8,6 +11,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Aside from './components/Aside';
 import { faker } from '@faker-js/faker';
 import moment from 'moment';
+import { user } from './utils/user-data';
 interface Tweet {
   id: string;
   name: string;
@@ -66,7 +70,7 @@ const App: React.FC = () => {
   moment.locale('pt-br');
 
   // Função para formatar a data de maneira personalizada
-  function formatarData(data: any) {
+  function formatarData(data) {
     const agora = moment();
     const dataMoment = moment(data);
 
@@ -86,31 +90,30 @@ const App: React.FC = () => {
     }
   }
 
-  // Gera uma data fictícia com o Faker
-  const dataFicticia = faker.date.between({
-    from: '2024-06-01',
-    to: new Date(),
-  });
+  function fakeDate() {
+    return faker.date.between({
+      from: '2024-06-01',
+      to: new Date(),
+    });
+  }
 
-  const randomName = faker.person.fullName();
-  const user = {
-    name: 'Moco',
-    username: 'moco.finance',
-    avatar: '/Moco.jpg',
-  };
-
-  const createTweet = (content: string, isnewPost: boolean): Tweet => {
+  const createTweet = (
+    content: string,
+    isnewPost: boolean,
+    imageTweet?: string
+  ): Tweet => {
+    console.log(imageTweet);
     return {
       id: uuidv4(),
-      name: isnewPost ? user.name : randomName,
+      name: isnewPost ? user.name : faker.person.fullName(),
       username: isnewPost ? user.username : faker.internet.username(),
       avatar: isnewPost ? user.avatar : faker.image.avatar(),
       content: content ? content : '',
-      time: isnewPost ? new Date().toString() : dataFicticia,
-      image: isnewPost ? null : ImagemContent(),
-      likes: 0,
-      retweets: 0,
-      comments: 0,
+      time: isnewPost ? new Date().toString() : fakeDate(),
+      image: isnewPost ? (imageTweet ? imageTweet : null) : ImagemContent(),
+      likes: isnewPost ? 0 : faker.number.int({ min: 0, max: 300 }),
+      retweets: isnewPost ? 0 : faker.number.int({ min: 0, max: 400 }),
+      comments: isnewPost ? 0 : faker.number.int({ min: 0, max: 320 }),
     };
   };
 
@@ -163,24 +166,31 @@ const App: React.FC = () => {
     }, 1000);
   };
 
-  const handleTweetCreation = (content: string) => {
-    const newTweet = createTweet(content, true);
+  const handleTweetCreation = (content: string, imageTweet: string) => {
+    const image = imageTweet;
+    const newTweet = createTweet(content, true, image);
     setTweets((prevTweets) => [newTweet, ...prevTweets]);
   };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTweets([...tweets]);
-    }, 1000);
+    }, 60000);
     return () => clearInterval(intervalId);
   }, [tweets]);
 
   return (
-    <div className='md:mx-auto flex flex-row text-white md:max-w-5xl'>
+    <div className='md:mx-auto flex flex-row text-white md:max-w-6xl'>
       <Navbar />
-      <main className='flex-grow border-x border-[#3A444C] max-w-xl'>
-        <header className='sticky top-0 z-10 bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg pb-6 '>
-          <a className='px-4 pt-4 font-bold cursor-pointer'>Home</a>
+      <main className='flex-grow border-x border-[#3A444C] max-w-full medium:max-w-xl'>
+        <header className='sticky top-0 z-10 flex items-center justify-between bg-black bg-opacity-90 border-b border-[#3A444C] backdrop-blur-lg'>
+          <div className='flex w-full items-center justify-center p-3.5 hover:bg-[#181818] cursor-pointer relative'>
+            <span className='font-semibold text-[15px]'>Para você</span>
+            <div className='absolute w-3/12 h-1 rounded bg-blue-400 bottom-0' />
+          </div>
+          <div className='flex w-full items-center justify-center p-3.5 hover:bg-[#181818] cursor-pointer'>
+            <span className='font-semibold text-gray-500'>Seguindo</span>
+          </div>
         </header>
         <Xform onTweet={handleTweetCreation} />
         <AnimatePresence>
@@ -224,9 +234,7 @@ const App: React.FC = () => {
           </AnimatePresence>
         </div>
       </main>
-      <aside className='hidden md:block w-96 px-4 mt-4 '>
-        <Aside />
-      </aside>
+      <Aside />
     </div>
   );
 };

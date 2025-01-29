@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import React, { useState } from 'react';
 import {
   ChartBar,
@@ -46,6 +49,13 @@ const Tweet: React.FC<TweetProps> = ({ tweet, formatarData }) => {
     }
   };
 
+  let time;
+  if (tweet.time === new Date().toString()) {
+    time = 'agora';
+  } else {
+    time = formatarData(tweet.time);
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -60,23 +70,28 @@ const Tweet: React.FC<TweetProps> = ({ tweet, formatarData }) => {
         />
         <div className='flex-1 flex-col'>
           <div className='flex justify-between items-center'>
-            <a href='#'>
+            <div>
               <a href='' className='font-bold hover:underline'>
                 {tweet.name}
               </a>
               <span className='ml-1 text-gray-500'>@{tweet.username}</span>
               <span className='ml-2 text-gray-500 hover:underline '>
-                {formatarData(tweet.time)}
+                &middot; {time}
               </span>
-            </a>
+            </div>
             <DotsThree size={24} />
           </div>
-          <p className='mt-2 '>{tweet.content}</p>
+          <textarea
+            readOnly
+            className='pt-2 mb-2 resize-none select-none w-full outline-none h-fit overflow-hidden'
+          >
+            {tweet.content}
+          </textarea>
           {tweet.image && (
             <img
               src={tweet.image}
               alt='Tweet'
-              className='rounded-2xl max-w-full h-auto mt-3'
+              className='rounded-2xl max-w-full h-auto'
             />
           )}
           <div className='flex justify-between mt-4 text-gray-500'>
@@ -99,8 +114,8 @@ const Tweet: React.FC<TweetProps> = ({ tweet, formatarData }) => {
               className='flex items-center cursor-pointer hover:text-red-400  '
               onClick={() => handleAction('like')}
             >
-                {liked ? (
-                <Heart size={20} weight="fill" className="text-red-400 " />
+              {liked ? (
+                <Heart size={20} weight='fill' className='text-red-400 ' />
               ) : (
                 <Heart size={20} />
               )}
