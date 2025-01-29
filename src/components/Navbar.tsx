@@ -32,7 +32,10 @@ const navItems: NavItemProps[] = [
 
 const NavItem: React.FC<NavItemProps> = ({ href, icon: Icon, text }) => (
   <div className='flex items-center gap-4 cursor-pointer p-2 lg:p-2.5 hover:bg-gray-200/10 rounded-full w-full'>
-    <Icon className='size-6 lg:size-7' />
+    <Icon
+      className='size-6 lg:size-7'
+      weight={Icon == House ? 'fill' : 'regular'}
+    />
     <a href={href} className='hidden lg:block font-medium text-xl text-white'>
       {text}
     </a>
